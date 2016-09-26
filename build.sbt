@@ -1,12 +1,57 @@
-name := """scalajs-ng"""
 
-version := "1.0"
+lazy val `scalajs-ng` = (project in file("."))
+  .enablePlugins(ScalaJSPlugin, ScalaJSReflectionPlugin)
+  .settings(commonSettings: _*)
+  .settings(publishingSettings: _*)
+  .settings(
+    libraryDependencies ++= Seq(
+      "org.scalameta" %% "scalameta" % "1.1.0",
+      "be.doeraene" %%% "scalajs-reflection" % "0.1.2-SNAPSHOT",
+      "com.github.lukajcb" %%% "rxscala-js" % "0.4.0",
+      "org.scala-js" %%% "scalajs-dom" % "0.9.0"
+    ),
+    addCompilerPlugin(
+      "org.scalameta" % "paradise" % "3.0.0-SNAPSHOT" cross CrossVersion.full),
+    scalaJSReflectSelectors ++= Seq(
+      selectDescendentClasses("ng.macros.NGAnnotation") -> reflectClassByName()
+    )
+  )
 
-scalaVersion := "2.11.7"
+lazy val commonSettings = Seq(
+  organization := "com.augustnagro",
+  version := "0.0.1-SNAPSHOT",
+  scalaVersion := "2.11.8",
+  scalacOptions ++= Seq("-deprecation",
+                        "-unchecked",
+                        "-feature",
+                        "-language:implicitConversions",
+                        "-Xlint"),
+  resolvers += Resolver.sonatypeRepo("releases"),
+  resolvers += Resolver.sonatypeRepo("snapshots")
+)
 
-// Change this to another test framework if you prefer
-libraryDependencies += "org.scalatest" %% "scalatest" % "2.2.4" % "test"
-
-// Uncomment to use Akka
-//libraryDependencies += "com.typesafe.akka" %% "akka-actor" % "2.3.11"
-
+lazy val publishingSettings = Seq(
+  homepage := Some(url("https://github.com/augustnagro/scalajs-ng")),
+  licenses += ("MIT", url(
+    "http://www.opensource.org/licenses/mit-license.php")),
+  scmInfo := Some(
+    ScmInfo(
+      url("https://github.com/augustnagro/scalajs-ng"),
+      "scm:git:git@github.com:augustnagro/scalajs-ng.git",
+      Some("scm:git:git@github.com:augustnagro/scalajs-ng.git")
+    )),
+  developers := List(Developer(id = "augustnagro@gmail.com",
+                          name = "August Nagro",
+                          email = "augustnagro@gmail.com",
+                          url = url("https://augustnagro.com"))),
+  publishMavenStyle := true,
+  publishArtifact in Test := false,
+  pomIncludeRepository := { _ => false },
+  publishTo := {
+    val nexus = "https://oss.sonatype.org/"
+    if (isSnapshot.value)
+      Some("snapshots" at nexus + "content/repositories/snapshots")
+    else
+      Some("releases" at nexus + "services/local/staging/deploy/maven2")
+  }
+)
