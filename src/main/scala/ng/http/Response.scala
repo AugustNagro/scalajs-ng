@@ -16,6 +16,7 @@ class Response extends js.Object {
   val bytesLoaded: Int = js.native
   val totalBytes: Int = js.native
   val headers: Headers = js.native
+  val json: js.Dynamic = js.native
 
   override def toString: String = js.native
 

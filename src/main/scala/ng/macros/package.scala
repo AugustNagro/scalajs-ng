@@ -1,26 +1,29 @@
 package ng
 
+import scala.language.implicitConversions
 import scala.scalajs.js
-import scala.scalajs.js.JSConverters._
+import scala.scalajs.js.|
 
 package object macros {
 
-  // TODO: Replace with Def macros when they become available?
+  // the right-hand side of a metadata like `"imports" -> ???`
+  // can be any of the two below types.
+  private[macros] type MetadataValue = js.Array[js.Any] | String
+  private[macros] type MetadataName = String
 
   /**
-    * Returns an array of js.Any representing the supplied items.
-    * @param classes
-    * @param jsVals Any additional js values
+    * Create a js.Array[js.Any] with less boilerplate
+    * @param values
+    * @return
     */
-  def @@(classes: Class[_]*)(jsVals: js.Any*): js.Array[js.Any] = (classes.map(@#) ++ jsVals).toJSArray
+  def @@(values: js.Any*): js.Array[js.Any] = js.Array[js.Any](values: _*)
 
   /**
-    * The singular of `@@`, accepting only class defs
+    * Implicitly converts a scala class to its javascript instance
     * @param clazz
-    * @return a js.Any representing this class in the global namespace. w
+    * @return a js.Any representing this class in the global namespace.
     */
-  def @#(clazz: Class[_]): js.Any = {
+  implicit def toJS(clazz: Class[_]): js.Any =
     clazz.getName.split('.').foldLeft(js.Dynamic.global)(_.selectDynamic(_))
-  }
 
 }

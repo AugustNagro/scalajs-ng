@@ -1,5 +1,7 @@
 package ng.macros
 
+import be.doeraene.sjsreflect.Reflect
+
 import scala.annotation.{StaticAnnotation, compileTimeOnly}
 import scala.meta._
 
@@ -8,7 +10,7 @@ import scala.meta._
   *
   * Decorate your launcher (that bootstraps angular and extends js.JSApp) with this macro
   *
-  * Implementation Details: Uses reflection to add the required ".annotations" and ".parameters" properties to each function object whose scala class was decorated by a macro (ex. @Component, @Directive)
+  * Implementation Details: Uses reflection to add the required ".annotations" and ".parameters" properties to each function object whose scala class was decorated by a macro (ex. @Component, @Directive). See https://angular.io/docs/ts/latest/cookbook/ts-to-js.html#!#class-metadata
   */
 @compileTimeOnly("@Bootstrap not expanded")
 class Bootstrap extends StaticAnnotation {
@@ -22,15 +24,15 @@ class Bootstrap extends StaticAnnotation {
     val propertyApplication =
       q"""
          be.doeraene.sjsreflect.Reflect
-         .getClassAndDescendants("ng.macros.NGAnnotation")
+         .enumerateClasses
          // gets the fully qualified class-name
-         .map(_._1)
+         .map(_.getName)
          .withFilter(_ != "ng.macros.NGAnnotation")
-         .foreach(classType => {
-           val objName = "annots." + classType.split('.').last + "_()"
+         .foreach(className => {
+           val objName = "annots." + className.split('.').last + "_()"
 
            val expr =
-           s"$$classType.annotations = $$objName.annotations; $$classType.parameters = $$objName.parameters"
+           s"$$className.annotations = $$objName.annotations; $$className.parameters = $$objName.parameters"
 
            scalajs.js.eval(expr)
          })

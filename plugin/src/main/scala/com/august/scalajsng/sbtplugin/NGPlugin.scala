@@ -14,7 +14,7 @@ object NGPlugin extends AutoPlugin {
       "org.scalameta" % "paradise" % "3.0.0-SNAPSHOT" cross CrossVersion.full),
 
     scalaJSReflectSelectors ++= Seq(
-      selectDescendentClasses("ng.macros.NGAnnotation") -> reflectClassByName()
+      selectDescendentClasses("ng.macros.NGAnnotation") -> reflectEnumerateClass()
     )
   )
 }

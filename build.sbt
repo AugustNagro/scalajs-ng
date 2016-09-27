@@ -1,4 +1,3 @@
-
 lazy val `scalajs-ng` = (project in file("."))
   .enablePlugins(ScalaJSPlugin, ScalaJSReflectionPlugin)
   .aggregate(plugin)
@@ -7,13 +6,13 @@ lazy val `scalajs-ng` = (project in file("."))
   .settings(
     libraryDependencies ++= Seq(
       "org.scalameta" %% "scalameta" % "1.1.0",
-      "be.doeraene" %%% "scalajs-reflection" % "0.1.2-SNAPSHOT",
+      "be.doeraene" %%% "scalajs-reflection" % "0.2.0-SNAPSHOT",
       "com.github.lukajcb" %%% "rxscala-js" % "0.4.0"
     ),
     addCompilerPlugin(
       "org.scalameta" % "paradise" % "3.0.0-SNAPSHOT" cross CrossVersion.full),
     scalaJSReflectSelectors ++= Seq(
-      selectDescendentClasses("ng.macros.NGAnnotation") -> reflectClassByName()
+      selectDescendentClasses("ng.macros.NGAnnotation") -> reflectEnumerateClass()
     )
   )
 
@@ -25,7 +24,7 @@ lazy val plugin = project
     description := "sbt plugin for scalajs-ng",
     sbtPlugin := true,
     scalaVersion := "2.10.5",
-    addSbtPlugin("be.doeraene" % "sbt-scalajs-reflection" % "0.1.2-SNAPSHOT")
+    addSbtPlugin("be.doeraene" % "sbt-scalajs-reflection" % "0.2.0-SNAPSHOT")
   )
 
 lazy val commonSettings = Seq(

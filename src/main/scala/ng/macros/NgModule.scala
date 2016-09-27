@@ -4,11 +4,10 @@ import ng.core.{ComponentFacade, NgModuleFacade}
 
 import scala.annotation.{StaticAnnotation, compileTimeOnly}
 import scala.meta._
-import scala.scalajs.js
 import scala.collection.immutable.Seq
 
 @compileTimeOnly("@NgModule not expanded")
-class NgModule(decoratorArgs: (String, js.Any)*) extends StaticAnnotation {
+class NgModule(decoratorArgs: (MetadataName, MetadataValue)*) extends StaticAnnotation {
 
   inline def apply(defn: Any): Any = meta {
     val q"new $_(..${annotationArgs: Seq[Term.Arg]})" = this
