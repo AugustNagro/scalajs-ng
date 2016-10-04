@@ -48,7 +48,7 @@ To build.sbt. Look at the tour of heroes demo for an example build.
 ### Annotations
 Use the `@Component()`, `@Directive()`, and `@NGModule()` macro annotations similarly to typescript decorators. The annotations expect a parameter list of tuples, where the first element is the metadata's name, and the second is its value, of type `String` or `js.Array[js.Any]` 
 
-Consider an annotation for a Component: 
+Consider a Component annotation:
 
 ```
 import ng.macros.Component
@@ -112,9 +112,9 @@ Or, using [ScalaTags](http://www.lihaoyi.com/scalatags/#GettingStarted), a fully
   )
 ```
  
-Include `"com.lihaoyi" %%% "scalatags" % "0.6.0"` in the project's library dependencies, and import `scalatags.Text.all._` in the component's file. `ng.ngScalabags._` contains helpers specific to angular. 
+Include `"com.lihaoyi" %%% "scalatags" % "0.6.0"` in the project's library dependencies, and import `scalatags.Text.all._` in the component's file. `ng.ngScalaTags._` contains helpers specific to angular. 
 
-By default, IntelliJ underlines implicit operations, which makes reading inline-defined html hard to read. You can change the highlighting by going to Settings->Editor->Colors & Fonts->Scala, and finding the `implicit conversion` row. The author finds that changing the annotation type to "boxed", and the color to #E6E6E6 works well. 
+By default, IntelliJ underlines implicit operations, which makes reading inline-defined html hard to read. You can change the highlighting by going to Settings->Editor->Colors & Fonts->Scala, and finding the `implicit conversion` row. The author finds that changing the annotation type to "boxed", with color #E6E6E6 works well. 
 
 #### External
 Write html in an external file, and reference it's path with the `template-url`. The same goes for external styles. 
@@ -123,9 +123,9 @@ Write html in an external file, and reference it's path with the `template-url`.
 
 To define some routes, create an object extending `RouteDeclaration`. 
 
-To use the routes, override the `routing` variable and import it in an NgModule. 
+To use the routes, define the `routing` variable and import it in an NgModule. 
 
-To define custom routing providers, override `routingProviders`, and include it in an NgModule's `providers`.  
+To define custom routing providers, define `routingProviders`, and include it in an NgModule's `providers`.  
 
 Example: 
 
@@ -143,7 +143,7 @@ object BaseRoutes extends RouteDeclaration {
     Route("heroes", component = classOf[HeroesComponent])
   )
 
-  override val routing: ModuleWithProviders = RouterModule.forRoot(routes)
+  val routing: ModuleWithProviders = RouterModule.forRoot(routes)
 
 }
 ```
@@ -174,9 +174,8 @@ object Launcher extends JSApp {
 ## Todo
 - Figure out how to better work with observables
     - ex. ActivatedRoute.params returns an Observable, but [rxscala-js](https://github.com/LukaJCB/rxscala-js) facades throw a runtime error, possibly due to Rx version differences
+- `@Inject`, `@Optional`, `@Pipe` and others. Should be pretty easy.
 - Testing
 - Documentation
-- `@Inject`, `@Optional`, `@Pipe` and others. Should be pretty easy.
-- Decide whether the facades should require `ng` in the global namespace, or use es6 modules and require a bundling tool like SystemJS. 
 - Facades for all of angular's public api
-- Figure out how to do ahead of time compilation for javascript sources.
+- AOT Compilation? Lazy loading? Bundling? Static typing of elements in template defns?
