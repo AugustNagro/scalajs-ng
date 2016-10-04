@@ -7,7 +7,8 @@ lazy val `scalajs-ng` = (project in file("."))
     libraryDependencies ++= Seq(
       "org.scalameta" %% "scalameta" % "1.1.0",
       "be.doeraene" %%% "scalajs-reflection" % "0.2.0-SNAPSHOT",
-      "com.github.lukajcb" %%% "rxscala-js" % "0.4.0"
+      "com.github.lukajcb" %%% "rxscala-js" % "0.4.0",
+      "com.lihaoyi" %%% "scalatags" % "0.6.0"
     ),
     addCompilerPlugin(
       "org.scalameta" % "paradise" % "3.0.0-SNAPSHOT" cross CrossVersion.full),

@@ -27,8 +27,8 @@ libraryDependencies += "com.augustnagro" %%% "scalajs-ng" "0.0.1-SNAPSHOT"
 ```
 To build.sbt. Look at the tour of heroes demo for an example build. 
 
-## Issues with current inline macros:
-- limited whitebox functionality
+## Limitations with current inline macros:
+- whitebox functionality
     - Cannot get the fully qualified name of an annotee. Therefore all companion objects are thrown under "annots.itsName_" which will cause namespace collisions for same-named components in different pacakges.
     - No TypeTags, etc
 - Classes can only expand into themselves and an eponymous companion. The `@Data` annotation cannot be currently implemented due to this restriction.
@@ -77,6 +77,47 @@ class AppModule
 ```
 
 Annotate any service class with `@Injectable` to enable dependency injection. You'll still need to add it as a `provider` on an NgModule.
+
+### Writing Templates
+
+There are three ways html templates can be made. 
+
+#### Inline (inside component annotation)
+Angular's authors recommend keeping templates small and defined by the `template` key of its component. Templates can be expressed as plain strings:
+
+```
+    "template" ->
+      """
+        |<h1>{{title}}</h1>
+        |<nav>
+        |  <a routerLink="/dashboard" routerLinkActive="active">Dashboard</a>
+        |  <a routerLink="/heroes" routerLinkActive="active">Heros</a>
+        |</nav>
+        |<router-outlet></router-outlet>
+        |""".stripMargin
+```
+
+Or, using [ScalaTags](http://www.lihaoyi.com/scalatags/#GettingStarted), a fully-typed XML/HTML/CSS construction library:
+
+```
+    "template" ->
+      div(
+        h1("{{title}}"),
+        tag("nav")(
+          routerLink("/dashboard")("Dashboard "),
+          routerLink("/heroes")("Heroes")
+        ),
+        routerOutlet
+      ).toString
+  )
+```
+ 
+Include `"com.lihaoyi" %%% "scalatags" % "0.6.0"` in the project's library dependencies, and import `scalatags.Text.all._` in the component's file. `ng.ngScalabags._` contains helpers specific to angular. 
+
+By default, IntelliJ underlines implicit operations, which makes reading inline-defined html hard to read. You can change the highlighting by going to Settings->Editor->Colors & Fonts->Scala, and finding the `implicit conversion` row. The author finds that changing the annotation type to "boxed", and the color to #E6E6E6 works well. 
+
+#### External
+Write html in an external file, and reference it's path with the `template-url`. The same goes for external styles. 
 
 ### Routing
 
@@ -138,4 +179,4 @@ object Launcher extends JSApp {
 - `@Inject`, `@Optional`, `@Pipe` and others. Should be pretty easy.
 - Decide whether the facades should require `ng` in the global namespace, or use es6 modules and require a bundling tool like SystemJS. 
 - Facades for all of angular's public api
-- Figure out how to do ahead of time compilation for javascript sources. 
+- Figure out how to do ahead of time compilation for javascript sources.
