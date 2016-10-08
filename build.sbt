@@ -1,12 +1,12 @@
-lazy val `scalajs-ng` = (project in file("."))
-  .enablePlugins(ScalaJSPlugin, ScalaJSReflectionPlugin)
-  .aggregate(plugin)
-  .settings(commonSettings: _*)
-  .settings(publishingSettings: _*)
-  .settings(
+lazy val `scalajs-ng` = (project in file(".")).
+  enablePlugins(ScalaJSPlugin, ScalaJSReflectionPlugin).
+  aggregate(plugin).
+  settings(commonSettings: _*).
+  settings(publishingSettings: _*).
+  settings(
     libraryDependencies ++= Seq(
       "org.scalameta" %% "scalameta" % "1.1.0",
-      "be.doeraene" %%% "scalajs-reflection" % "0.2.0-SNAPSHOT",
+      "be.doeraene" %%% "scalajs-reflection" % "0.1.1-SNAPSHOT",
       "com.github.lukajcb" %%% "rxscala-js" % "0.4.0",
       "com.lihaoyi" %%% "scalatags" % "0.6.0"
     ),
@@ -17,15 +17,15 @@ lazy val `scalajs-ng` = (project in file("."))
     )
   )
 
-lazy val plugin = project
-  .settings(commonSettings: _*)
-  .settings(publishingSettings: _*)
-  .settings(
+lazy val plugin = project.
+  settings(commonSettings: _*).
+  settings(publishingSettings: _*).
+  settings(
     name := "sbt-scalajs-ng",
     description := "sbt plugin for scalajs-ng",
     sbtPlugin := true,
     scalaVersion := "2.10.5",
-    addSbtPlugin("be.doeraene" % "sbt-scalajs-reflection" % "0.2.0-SNAPSHOT")
+    addSbtPlugin("be.doeraene" % "sbt-scalajs-reflection" % "0.1.1-SNAPSHOT")
   )
 
 lazy val commonSettings = Seq(

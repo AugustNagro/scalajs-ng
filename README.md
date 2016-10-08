@@ -31,7 +31,7 @@ To build.sbt. Look at the tour of heroes demo for an example build.
 - whitebox functionality
     - Cannot get the fully qualified name of an annotee. Therefore all companion objects are thrown under "annots.itsName_" which will cause namespace collisions for same-named components in different pacakges.
     - No TypeTags, etc
-- Classes can only expand into themselves and an eponymous companion. The `@Data` annotation cannot be currently implemented due to this restriction.
+- Classes can only expand into themselves and an eponymous companion. Angulate2's `@Data` annotation cannot be currently implemented due to this restriction.
 - No named params allowed when annotating (ex. `@Component(selector = "gg")` doesn't compile)
 
 ## Benefits
@@ -42,7 +42,7 @@ To build.sbt. Look at the tour of heroes demo for an example build.
 ## Comparison to [angulate2](https://github.com/jokade/angulate2)
 - Some syntax was borrowed. 
 - Macro logic is simplified and in a single library dependency + plugin (as opposed to spread out across 3 repos)
-- Reflection removes need for seperate `annotations.js` file
+- Reflection removes need for separate `annotations.js` file
 
 ## Documentation
 ### Annotations
@@ -69,8 +69,7 @@ import ng.macros.NgModule
 import ng.macros._
 
 @NgModule(
-  "imports" -> @@(classOf[BrowserModule], BaseRoutes.routing),
-  
+  "imports" -> @@(classOf[BrowserModule]) 
   ???
 )
 class AppModule
@@ -100,6 +99,11 @@ Angular's authors recommend keeping templates small and defined by the `template
 Or, using [ScalaTags](http://www.lihaoyi.com/scalatags/#GettingStarted), a fully-typed XML/HTML/CSS construction library:
 
 ```
+import scalatags.Text.all._
+import ng.ngScalaTags._
+
+...
+
     "template" ->
       div(
         h1("{{title}}"),
@@ -114,39 +118,40 @@ Or, using [ScalaTags](http://www.lihaoyi.com/scalatags/#GettingStarted), a fully
  
 Include `"com.lihaoyi" %%% "scalatags" % "0.6.0"` in the project's library dependencies, and import `scalatags.Text.all._` in the component's file. `ng.ngScalaTags._` contains helpers specific to angular. 
 
-By default, IntelliJ underlines implicit operations, which makes reading inline-defined html hard to read. You can change the highlighting by going to Settings->Editor->Colors & Fonts->Scala, and finding the `implicit conversion` row. The author finds that changing the annotation type to "boxed", with color #E6E6E6 works well. 
+By default, IntelliJ underlines implicit operations, which makes reading component-defined html hard to read. You can change the highlighting by going to Settings->Editor->Colors & Fonts->Scala, and finding the `implicit conversion` row. The author finds that changing the annotation type to "boxed", with color #E6E6E6 works well. 
 
 #### External
-Write html in an external file, and reference it's path with the `template-url`. The same goes for external styles. 
+Write html in an external file, and reference it's path with `"templateUrl" -> "insert template path"`. The same goes for the `styleUrls` array: `"styleUrls" -> @@("styleUrlOne", "styleUrl2")`.
 
 ### Routing
 
-To define some routes, create an object extending `RouteDeclaration`. 
+Routes can be defined with similar syntax to that used in Angular's [Routing Guide](https://angular.io/docs/ts/latest/guide/router.html). 
 
-To use the routes, define the `routing` variable and import it in an NgModule. 
-
-To define custom routing providers, define `routingProviders`, and include it in an NgModule's `providers`.  
+It's generally recommended to create distinct routing modules, which are imported into the main module.
 
 Example: 
 
 ```
-import ng.core.ModuleWithProviders
+import ng.macros.NgModule
 import ng.macros._
-import ng.router.{Route, RouteDeclaration, RouterModule, Routes}
+import ng.router.{Route, RouterModule, Routes}
 
-object BaseRoutes extends RouteDeclaration {
+@NgModule(
+  "imports" -> @@(
+    RouterModule.forRoot(
+      Routes(
+        Route(path = "", redirectTo = "/dashboard", pathMatch = "full"),
+        Route(path = "dashboard", component = classOf[DashboardComponent]),
+        Route(path = "detail/:id", component = classOf[HeroDetailComponent]),
+        Route(path = "heroes", component = classOf[HeroesComponent])
+      )
+  )),
 
-  private val routes: Routes = js.Array(
-    Route("", redirectTo = "/dashboard", pathMatch = "full"),
-    Route("dashboard", component = classOf[DashboardComponent]),
-    Route("detail/:id", component = classOf[HeroDetailComponent]),
-    Route("heroes", component = classOf[HeroesComponent])
-  )
-
-  val routing: ModuleWithProviders = RouterModule.forRoot(routes)
-
-}
+  "exports" -> @@(RouterModule)
+)
+class AppRoutingModule 
 ```
+
 ### Bootstrapping
 Make sure that `persistLauncher := true` in build.sbt, and annotate the launcher object with `@Bootstrap`. Within its main method, call `PlatformBrowserDynamic.platformBrowserDynamic().bootstrapModule()`
 
@@ -172,10 +177,19 @@ object Launcher extends JSApp {
 ```
 
 ## Todo
+- Questions / Requests for ScalaJS team
+    - `static` variable for classes, similar to typescript
+    - Use case classes as JS literals (with pattern matching)
+    - ES6 modules. Will each file be output as own JS file?
+    - Release new scalajs-reflect
 - Figure out how to better work with observables
     - ex. ActivatedRoute.params returns an Observable, but [rxscala-js](https://github.com/LukaJCB/rxscala-js) facades throw a runtime error, possibly due to Rx version differences
 - `@Inject`, `@Optional`, `@Pipe` and others. Should be pretty easy.
 - Testing
 - Documentation
+    - Should Angular 2 docs be included?
 - Facades for all of angular's public api
 - AOT Compilation? Lazy loading? Bundling? Static typing of elements in template defns?
+    - An issue was made for AOT compilation [here](https://github.com/angular/angular/issues/11700)
+    - Support for module.id?
+- How to version

@@ -14,6 +14,7 @@ trait Route extends js.Object {
   val canActivate: js.Array[js.Any] = js.native
   val canActivateChild: js.Array[js.Any] = js.native
   val canDeactivate: js.Array[js.Any] = js.native
+  val canLoad: js.Array[js.Any] = js.native
   val data: js.Object = js.native
   val resolve: js.Any = js.native
   val children: js.Array[js.Any] = js.native
@@ -30,6 +31,7 @@ object Route {
             canActivate: js.Array[js.Any] = null,
             canActivateChild: js.Array[js.Any] = null,
             canDeactivate: js.Array[js.Any] = null,
+            canLoad: js.Array[js.Any] = null,
             data: js.Object = null,
             resolve: js.Any = null,
             children: js.Array[js.Any] = null,

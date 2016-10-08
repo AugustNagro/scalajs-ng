@@ -35,7 +35,7 @@ package object ngScalaTags {
   /**
     * One-way binding from view-target to data-source
     *
-    * Use `ngOn("target") := "statement"`
+    * Use `ngOn(target) := "statement"`
     * In-place of `(target)="statement"`
     * @param event Must be a recognized browser event (ex. onmousemove)
     * @return
@@ -44,8 +44,8 @@ package object ngScalaTags {
     val attrName = event.name.replaceFirst("on", "on-")
     attr(attrName)
   }
-  /**
-    * Two way data-binding
+
+  /** Two way data-binding
     * Note: FormsModule is required
     *
     * Use `ngBindOn("target")("expression")`
@@ -63,4 +63,3 @@ package object ngScalaTags {
   def ngFor(expr: String) = attr("template") := s"ngFor $expr"
 
 }
-

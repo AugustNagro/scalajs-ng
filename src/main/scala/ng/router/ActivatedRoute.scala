@@ -21,5 +21,5 @@ trait ActivatedRoute extends js.Object {
   val firstChild: ActivatedRoute = js.native
   val children: js.Array[ActivatedRoute] = js.native
   val pathFromRoot: js.Array[ActivatedRoute] = js.native
-  override def toString: String = js.native
+  override def toString(): String = js.native
 }

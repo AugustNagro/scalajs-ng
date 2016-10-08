@@ -15,7 +15,7 @@ trait RequestOptionsArgs extends js.Object {
   val responseType: String = js.native
 }
 
-  @OptionsObject
+@OptionsObject
 object RequestOptionsArgs {
   def apply(
       url: String = null,
