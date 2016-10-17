@@ -6,14 +6,11 @@ import ng.AnnotationFacade
 import scala.collection.immutable.Seq
 import scala.meta.{Term, _}
 
-/**
-  * Processes the macros
-  */
+/** Build the Annotations */
 private[ng] object NgMacroTools {
 
 
-  /**
-    * @param defn Initial Tree
+  /** @param defn Initial Tree
     * @return meta.Stat replacing the original definition
     */
   def build(annotation: Option[Annotation], defn: Tree): Stat = {
@@ -45,11 +42,7 @@ private[ng] object NgMacroTools {
        """
   }
 
-  /**
-    * Adds `scalajs.js.Object` and `ng.macros.NGAnnotation` to the ctor calls
-    * @param oldCalls
-    * @return
-    */
+  /** Adds `scalajs.js.Object` and `ng.macros.NGAnnotation` to the ctor calls */
   private def buildCtorCalls(oldCalls: Seq[Ctor.Call]): Seq[Ctor.Call] = {
 
     val jsObjCall = "scalajs.js.Object".parse[Ctor.Call].get

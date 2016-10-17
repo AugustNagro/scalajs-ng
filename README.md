@@ -14,16 +14,16 @@ A re-implementation of Angular's Tour of Heroes demo is live [here](https://augu
 ## Installing
 
 Include the following to project/plugins.sbt:
-```
+```scala
 resolvers += Resolver.sonatypeRepo("snapshots")
 addSbtPlugin("com.augustnagro" % "sbt-scalajs-ng" % "0.0.1-SNAPSHOT")
 ```
 Rebuild, and then add
 
-```
+```scala
 enablePlugins(NGPlugin)
 resolvers += Resolver.sonatypeRepo("snapshots")
-libraryDependencies += "com.augustnagro" %%% "scalajs-ng" "0.0.1-SNAPSHOT" 
+libraryDependencies += "com.augustnagro" %%% "scalajs-ng" % "0.0.1-SNAPSHOT" 
 ```
 To build.sbt. Look at the tour of heroes demo for an example build. 
 
@@ -32,7 +32,6 @@ To build.sbt. Look at the tour of heroes demo for an example build.
     - Cannot get the fully qualified name of an annotee. Therefore all companion objects are thrown under "annots.itsName_" which will cause namespace collisions for same-named components in different pacakges.
     - No TypeTags, etc
 - Classes can only expand into themselves and an eponymous companion. Angulate2's `@Data` annotation cannot be currently implemented due to this restriction.
-- No named params allowed when annotating (ex. `@Component(selector = "gg")` doesn't compile)
 
 ## Benefits
 - Huge simplification + readability improvements. Should be easier to add features + maintain
@@ -50,7 +49,7 @@ Use the `@Component()`, `@Directive()`, and `@NGModule()` macro annotations simi
 
 Consider a Component annotation:
 
-```
+```scala
 import ng.macros.Component
 
 @Component("selector" -> "my-app", "template" -> "Hi")
@@ -63,28 +62,28 @@ Importing the `ng.macros` package object also includes an implicit conversion fr
 
 Below is the declaration of an NgModule:
  
-```
+```scala
 import ng.platformBrowser.BrowserModule
 import ng.macros.NgModule
 import ng.macros._
 
 @NgModule(
-  "imports" -> @@(classOf[BrowserModule]) 
+  "imports" -> @@(classOf[BrowserModule], RoutesObject.routes) 
   ???
 )
 class AppModule
 ```
 
-Annotate any service class with `@Injectable` to enable dependency injection. You'll still need to add it as a `provider` on an NgModule.
+Annotate any service class with `@Injectable` to enable dependency injection. You'll still need to add it to the `provider` array on an NgModule.
 
 ### Writing Templates
 
-There are three ways html templates can be made. 
+There are two ways html templates can be made. 
 
 #### Inline (inside component annotation)
 Angular's authors recommend keeping templates small and defined by the `template` key of its component. Templates can be expressed as plain strings:
 
-```
+```scala
     "template" ->
       """
         |<h1>{{title}}</h1>
@@ -96,9 +95,9 @@ Angular's authors recommend keeping templates small and defined by the `template
         |""".stripMargin
 ```
 
-Or, using [ScalaTags](http://www.lihaoyi.com/scalatags/#GettingStarted), a fully-typed XML/HTML/CSS construction library:
+Or, using [ScalaTags](http://www.lihaoyi.com/scalatags/#GettingStarted), a fully-typed HTML construction library:
 
-```
+```scala
 import scalatags.Text.all._
 import ng.ngScalaTags._
 
@@ -121,7 +120,7 @@ Include `"com.lihaoyi" %%% "scalatags" % "0.6.0"` in the project's library depen
 By default, IntelliJ underlines implicit operations, which makes reading component-defined html hard to read. You can change the highlighting by going to Settings->Editor->Colors & Fonts->Scala, and finding the `implicit conversion` row. The author finds that changing the annotation type to "boxed", with color #E6E6E6 works well. 
 
 #### External
-Write html in an external file, and reference it's path with `"templateUrl" -> "insert template path"`. The same goes for the `styleUrls` array: `"styleUrls" -> @@("styleUrlOne", "styleUrl2")`.
+Write html in an external file, and reference it's path with `"templateUrl" -> "insert absolute path"`. The same goes for the `styleUrls` array: `"styleUrls" -> @@("styleUrlOne", "styleUrlTwo")`.
 
 ### Routing
 
@@ -131,7 +130,7 @@ It's generally recommended to create distinct routing modules, which are importe
 
 Example: 
 
-```
+```scala
 import ng.macros.NgModule
 import ng.macros._
 import ng.router.{Route, RouterModule, Routes}
@@ -157,7 +156,7 @@ Make sure that `persistLauncher := true` in build.sbt, and annotate the launcher
 
 Example: 
 
-```
+```scala
 import ng.macros.Bootstrap
 import ng.platformBrowserDynamic.PlatformBrowserDynamic
 import scala.scalajs.js.JSApp
@@ -177,19 +176,14 @@ object Launcher extends JSApp {
 ```
 
 ## Todo
-- Questions / Requests for ScalaJS team
-    - `static` variable for classes, similar to typescript
-    - Use case classes as JS literals (with pattern matching)
-    - ES6 modules. Will each file be output as own JS file?
-    - Release new scalajs-reflect
+- Add named parameters, which are now supported in scalameta/paradise 3.0.0-SNAPSHOT
 - Figure out how to better work with observables
     - ex. ActivatedRoute.params returns an Observable, but [rxscala-js](https://github.com/LukaJCB/rxscala-js) facades throw a runtime error, possibly due to Rx version differences
 - `@Inject`, `@Optional`, `@Pipe` and others. Should be pretty easy.
 - Testing
 - Documentation
-    - Should Angular 2 docs be included?
 - Facades for all of angular's public api
-- AOT Compilation? Lazy loading? Bundling? Static typing of elements in template defns?
+- AOT Compilation? Lazy loading? Bundling? 
     - An issue was made for AOT compilation [here](https://github.com/angular/angular/issues/11700)
     - Support for module.id?
 - How to version

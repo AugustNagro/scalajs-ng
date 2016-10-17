@@ -12,33 +12,27 @@ package object ngScalaTags {
 
   def ngRef(id: String) = attr(s"ref-$id") := ""
 
-  /**
-    * One-way binding from data-source to view target
+  /** One-way binding from data-source to view target
     *
     * Use `ngBind("target") := "expression"`
     * In-place of `[target]="expression"`
     * @param target the data-source
-    * @return
     */
   def ngBind(target: String) = attr(s"bind-$target")
 
-  /**
-    * One-way binding from view-target to data-source
+  /** One-way binding from view-target to data-source
     *
     * Use `ngOn("target") := "statement"`
     * In-place of `(target)="statement"`
     * @param target the view-target
-    * @return
     */
   def ngOn(target: String) = attr(s"on-$target")
 
-  /**
-    * One-way binding from view-target to data-source
+  /** One-way binding from view-target to data-source
     *
     * Use `ngOn(target) := "statement"`
     * In-place of `(target)="statement"`
     * @param event Must be a recognized browser event (ex. onmousemove)
-    * @return
     */
   def ngOn(event: Attr) = {
     val attrName = event.name.replaceFirst("on", "on-")

@@ -6,6 +6,7 @@ import scala.annotation.{StaticAnnotation, compileTimeOnly}
 import scala.meta._
 import scala.collection.immutable.Seq
 
+/** Angular's @Component annotation */
 @compileTimeOnly("@Component not expanded")
 class Component(decoratorArgs: (MetadataName, MetadataValue)*) extends StaticAnnotation {
 

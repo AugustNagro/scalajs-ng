@@ -6,6 +6,7 @@ import scala.annotation.{StaticAnnotation, compileTimeOnly}
 import scala.meta._
 import scala.collection.immutable.Seq
 
+/** Angular's @Directive Annotation */
 @compileTimeOnly("@Directive not expanded")
 class Directive(decoratorArgs: (MetadataName, MetadataValue)*) extends StaticAnnotation {
 
