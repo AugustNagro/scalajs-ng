@@ -6,7 +6,7 @@ lazy val `scalajs-ng` = (project in file(".")).
   settings(
     libraryDependencies ++= Seq(
       "org.scalameta" %% "scalameta" % "1.1.0",
-      "be.doeraene" %%% "scalajs-reflection" % "0.1.1-SNAPSHOT",
+      "be.doeraene" %%% "scalajs-reflection" % "0.1.1",
       "com.github.lukajcb" %%% "rxscala-js" % "0.4.0",
       "com.lihaoyi" %%% "scalatags" % "0.6.0"
     ),
@@ -25,7 +25,7 @@ lazy val plugin = project.
     description := "sbt plugin for scalajs-ng",
     sbtPlugin := true,
     scalaVersion := "2.10.5",
-    addSbtPlugin("be.doeraene" % "sbt-scalajs-reflection" % "0.1.1-SNAPSHOT")
+    addSbtPlugin("be.doeraene" % "sbt-scalajs-reflection" % "0.1.1")
   )
 
 lazy val commonSettings = Seq(

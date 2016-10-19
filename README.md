@@ -2,13 +2,12 @@
 
 Experimental Angular 2 facades for scalajs using [inline macros](https://github.com/scalameta/paradise).
 
-A re-implementation of Angular's Tour of Heroes demo is live [here](https://augustnagro.com/tourofheroes), with source code [here](https://github.com/augustnagro/toh). Edit a hero by clicking on its name.
+A re-implementation of Angular's Tour of Heroes demo is live [here](https://augustnagro.com/tourofheroes), with source code [here](https://github.com/AugustNagro/scalajs-ng-examples) Edit a hero by clicking on its name.
 
 - [Installing](#installing)
-- [Current Issues](#issues-with-current-edition-of-inline-macros)
-- [Benefits](#Benefits)
 - [Comparison to angulate2](#comparison-to-angulate2)
 - [Documentation](#documentation)
+- [Issues with new macros](#issues-with-current-edition-of-inline-macros)
 - [Todo](#todo)
 
 ## Installing
@@ -27,20 +26,11 @@ libraryDependencies += "com.augustnagro" %%% "scalajs-ng" % "0.0.1-SNAPSHOT"
 ```
 To build.sbt. Look at the tour of heroes demo for an example build. 
 
-## Limitations with current inline macros:
-- whitebox functionality
-    - Cannot get the fully qualified name of an annotee. Therefore all companion objects are thrown under "annots.itsName_" which will cause namespace collisions for same-named components in different pacakges.
-    - No TypeTags, etc
-- Classes can only expand into themselves and an eponymous companion. Angulate2's `@Data` annotation cannot be currently implemented due to this restriction.
-
-## Benefits
-- Huge simplification + readability improvements. Should be easier to add features + maintain
-- Issues with inline macros are well known and will be fixed/implemented
-- I expect that the current experimental macros will be deprecated soon in favor of the new design
-
 ## Comparison to [angulate2](https://github.com/jokade/angulate2)
 - Some syntax was borrowed. 
+- Uses newest (most experimental) iteration of macros
 - Macro logic is simplified and in a single library dependency + plugin (as opposed to spread out across 3 repos)
+    - Should be easier to understand and maintain
 - Reflection removes need for separate `annotations.js` file
 
 ## Documentation
@@ -174,6 +164,12 @@ object Launcher extends JSApp {
 }
 
 ```
+
+## Limitations with current inline macros:
+- whitebox functionality
+    - Cannot get the fully qualified name of an annotee. Therefore all companion objects are thrown under "annots.itsName_", which will cause problems if two annotated classes/objects from different packages have the same name.
+    - No TypeTags, etc
+- Classes can only expand into themselves and an eponymous companion. Angulate2's `@Data` annotation cannot be currently implemented due to this restriction.
 
 ## Todo
 - Add named parameters, which are now supported in scalameta/paradise 3.0.0-SNAPSHOT
