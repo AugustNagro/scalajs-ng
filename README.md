@@ -2,7 +2,9 @@
 
 Experimental Angular 2 facades for scalajs using [inline macros](https://github.com/scalameta/paradise).
 
-A re-implementation of Angular's Tour of Heroes demo is live [here](https://augustnagro.com/tourofheroes), with source code [here](https://github.com/AugustNagro/scalajs-ng-examples) Edit a hero by clicking on its name.
+**Status:** This project is an experiment and should not be used.
+
+A re-implementation of Angular's Tour of Heroes demo is live [here](https://augustnagro.com/tourofheroes) Edit a hero by clicking on its name.
 
 - [Installing](#installing)
 - [Comparison to angulate2](#comparison-to-angulate2)
