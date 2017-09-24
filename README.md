@@ -4,7 +4,7 @@ Experimental Angular 2 facades for scalajs using [inline macros](https://github.
 
 **Status:** This project is an experiment and should not be used.
 
-A re-implementation of Angular's Tour of Heroes demo is live [here](https://augustnagro.com/tourofheroes) Edit a hero by clicking on its name.
+A re-implementation of Angular's Tour of Heroes demo is live [here](https://august.nagro.us/tourofheroes) Edit a hero by clicking on its name.
 
 - [Installing](#installing)
 - [Comparison to angulate2](#comparison-to-angulate2)
